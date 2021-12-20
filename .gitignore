@@ -89,3 +89,7 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+/.idea/.gitignore
+/.idea/modules.xml
+/.idea/petey-quest.iml
+/.idea/vcs.xml
