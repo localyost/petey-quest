@@ -4,6 +4,7 @@ import peteFace from './images/peteface.png';
 import juergenface from './images/juergenface.png';
 import floface from './images/floface.png';
 import explosionsheet from './images/spriteexplosion.png';
+import peterface from './images/peterface.png';
 import sheet from './images/gameSheet.png';
 /**
  * Default global resource dictionary. This gets loaded immediately
@@ -16,6 +17,7 @@ const Resources = {
     spriteImageSheet: new ImageSource(sheet),
     JreFace: new ImageSource(juergenface),
     FlowFace: new ImageSource(floface),
+    PeterFace: new ImageSource(peterface),
     explosionImageSheet: new ImageSource(explosionsheet)
 }
 

@@ -28,9 +28,17 @@ export default class Baddie extends Actor {
     onInitialize(_engine: Engine) {
         this.explode = Animation.fromSpriteSheet(explosionSheet, [0,1,2,3,4,6], 100);
         this.explode.scale = vec(3,3)
-        const rand = Math.floor(Math.random() * (1 + 1));
-        const sprite = rand === 1 ? Resources.FlowFace.toSprite() : Resources.JreFace.toSprite();
-        this.graphics.add(sprite)
+        const rand = Math.floor(Math.random() * 3);
+        switch (rand){
+            case 0:
+                this.graphics.add(Resources.FlowFace.toSprite())
+                break;
+            case 1:
+                this.graphics.add(Resources.JreFace.toSprite())
+                break;
+            case 2:
+                this.graphics.add(Resources.PeterFace.toSprite())
+        }
         this.actions.meet(this.player, config.enemySpeed);
 
         this.on('precollision', this.onPreCollision);
