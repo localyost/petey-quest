@@ -4,6 +4,7 @@ import {explosionSheet, Resources} from "../resources";
 import * as ex from "excalibur";
 import {Bullet} from "./bullet";
 import config from "../config";
+import {stats} from "../stats";
 
 export default class Baddie extends Actor {
 
@@ -50,6 +51,7 @@ export default class Baddie extends Actor {
                 this.graphics.add(this.explode)
                 this.hits++
             } else {
+                stats.score++;
                 this.kill();
             }
         }

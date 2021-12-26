@@ -2,7 +2,6 @@ import { Engine, Loader, DisplayMode } from 'excalibur';
 import { LevelOne } from './scenes/level-one/level-one';
 import { Player } from './actors/player';
 import { Resources } from './resources';
-import Baddie from "./actors/baddie";
 
 /**
  * Managed game class

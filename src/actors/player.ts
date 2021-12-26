@@ -4,6 +4,7 @@ import * as ex from 'excalibur';
 import Config from "../config";
 import {Bullet} from "./bullet";
 import Baddie from "./baddie";
+import {stats} from "../stats";
 
 
 export class Player extends Actor {
@@ -33,7 +34,7 @@ export class Player extends Actor {
 
   private onPostCollision(evt: ex.PostCollisionEvent) {
     if (evt.other instanceof Baddie) {
-      location.reload();
+      stats.gameOver = true;
     }
   }
 
@@ -46,29 +47,30 @@ export class Player extends Actor {
   }
 
   handlePointerEvent = (engine: ex.Engine, evt: ex.Input.PointerDownEvent) => {
-    this.fire(engine, evt);
+    if (!stats.gameOver) {
+      this.fire(engine, evt);
+    }
   }
   handleKeyEvent = (engine: ex.Engine, evt: ex.Input.KeyEvent) => {
-    let dir = ex.Vector.Zero.clone();
-    switch (evt.key) {
-      case ex.Input.Keys.W:
-        dir.y += -1;
-        break;
-      case ex.Input.Keys.A:
-        dir.x += -1;
-        break;
-      case ex.Input.Keys.D:
-        dir.x += 1;
-        break;
-      case ex.Input.Keys.S:
-        dir.y += 1;
-        break;
-      case ex.Input.Keys.Space:
-
-
-    }
-    if (dir.x !== 0 || dir.y !== 0) {
-      this.vel = dir.normalize().scale(Config.playerSpeed);
+    if (!stats.gameOver) {
+      let dir = ex.Vector.Zero.clone();
+      switch (evt.key) {
+        case ex.Input.Keys.W:
+          dir.y += -1;
+          break;
+        case ex.Input.Keys.A:
+          dir.x += -1;
+          break;
+        case ex.Input.Keys.D:
+          dir.x += 1;
+          break;
+        case ex.Input.Keys.S:
+          dir.y += 1;
+          break;
+      }
+      if (dir.x !== 0 || dir.y !== 0) {
+        this.vel = dir.normalize().scale(Config.playerSpeed);
+      }
     }
   }
 
