@@ -1,8 +1,10 @@
 import * as ex from "excalibur";
+import {Animation, CollisionType, vec, Vector} from "excalibur";
 import Config from "../config";
-import {vec, Vector, Animation} from "excalibur";
 
 import {gameSheet} from "../resources";
+import Baddie from "./baddie";
+
 export class Bullet extends ex.Actor {
     public owner?: ex.Actor;
     constructor(start: Vector, destination: Vector, owner?: ex.Actor) {
@@ -13,9 +15,8 @@ export class Bullet extends ex.Actor {
             width: Config.bulletSize,
             height: Config.bulletSize,
             color: ex.Color.Red,
-
+            collisionType: CollisionType.Passive
         });
-        // this.body.collider.type = ex.CollisionType.Passive;
         this.owner = owner;
     }
 
@@ -27,5 +28,13 @@ export class Bullet extends ex.Actor {
         )
         animation.scale = vec(2,2);
         this.graphics.add(animation);
+        this.on("exitviewport", event => this.kill())
+        this.on('precollision', this.onPreCollision);
+    }
+
+    private onPreCollision(evt: ex.PostCollisionEvent) {
+        if (evt.other instanceof Baddie) {
+            this.kill();
+        }
     }
 }

@@ -1,24 +1,24 @@
-import {Actor, Color, Engine, vec} from 'excalibur';
+import {Actor, Engine, vec} from 'excalibur';
 import {Resources} from '../resources';
 import * as ex from 'excalibur';
 import Config from "../config";
 import {Bullet} from "./bullet";
+import Baddie from "./baddie";
 
 
 export class Player extends Actor {
 
   constructor() {
     super({
-      pos: vec(150, 150),
-      width: 25,
-      height: 25,
-      color: new Color(255, 255, 255)
+      height: 100,
+      width: 80,
+      pos: vec(500, 500),
+      collisionType: ex.CollisionType.Active,
     });
   }
 
   onInitialize(engine:Engine) {
     const sprite = Resources.PeteFace.toSprite();
-
     this.graphics.use(sprite);
     engine.input.keyboard.on('hold', (event) => this.handleKeyEvent(engine, event));
     engine.input.keyboard.on('release', (evt: ex.Input.KeyEvent) => {
@@ -27,6 +27,14 @@ export class Player extends Actor {
       }
     });
     engine.input.pointers.primary.on('down', (evt) => this.handlePointerEvent(engine, <ex.Input.PointerDownEvent>evt));
+
+    this.on('postcollision', this.onPostCollision);
+  }
+
+  private onPostCollision(evt: ex.PostCollisionEvent) {
+    if (evt.other instanceof Baddie) {
+      location.reload();
+    }
   }
 
   onPostUpdate(engine: ex.Engine, delta: number) {

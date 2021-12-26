@@ -1,24 +1,50 @@
-import {Actor, Color, Engine, vec} from "excalibur";
+import {Actor, Animation, Color, Engine, Timer, vec, Vector} from "excalibur";
 import {Player} from "./player";
-import {Resources} from "../resources";
+import {explosionSheet, Resources} from "../resources";
+import * as ex from "excalibur";
+import {Bullet} from "./bullet";
+import config from "../config";
 
 export default class Baddie extends Actor {
 
+    private explode?: ex.Animation;
+    private hits = 0;
+
     constructor(private player: Player) {
         super({
-            pos: vec(Math.random()*1000 + 200, -200),
-            width: 25,
-            height: 25,
-            color: new Color(255, 255, 255)
+            height: 100,
+            width: 80,
+            pos: Baddie.getStartPosition(),
+            collisionType: ex.CollisionType.Active
         });
     }
+
+    private static getStartPosition(): Vector {
+        const rand = Math.floor(Math.random() * (1 + 1));
+        const y = rand === 1 ? 1500 : -200
+        const x = Math.random()*3000;
+        return vec(x, y);
+    }
     onInitialize(_engine: Engine) {
-        const rand = Math.random();
+        this.explode = Animation.fromSpriteSheet(explosionSheet, [0,1,2,3,4,6], 100);
+        this.explode.scale = vec(3,3)
+        const rand = Math.floor(Math.random() * (1 + 1));
         const sprite = rand === 1 ? Resources.FlowFace.toSprite() : Resources.JreFace.toSprite();
-        this.graphics.use(sprite)
-        this.actions
-            .meet(this.player, 100);
+        this.graphics.add(sprite)
+        this.actions.meet(this.player, config.enemySpeed);
+
+        this.on('precollision', this.onPreCollision);
     }
 
+    private onPreCollision(evt: ex.PostCollisionEvent) {
+        if (evt.other instanceof Bullet) {
+            if (this.hits === 0) {
+                this.graphics.add(this.explode)
+                this.hits++
+            } else {
+                this.kill();
+            }
+        }
+    }
 
 }
