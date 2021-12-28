@@ -14,7 +14,17 @@ export class LevelOne extends Scene {
     super();
   }
   public onInitialize(engine: Engine) {
-    let baddieTimer = new ex.Timer({
+
+    this.setBaddieTimer();
+
+    this.setFragsLabel();
+
+    this.setGameOverLabel(engine);
+
+  }
+
+  private setBaddieTimer() {
+    const baddieTimer = new ex.Timer({
       fcn: () => {
         const bad = new Baddie(this.player);
         this.add(bad);
@@ -25,6 +35,9 @@ export class LevelOne extends Scene {
     });
     baddieTimer.start();
     this.addTimer(baddieTimer);
+  }
+
+  private setFragsLabel() {
     const scoreLabel = new ex.Label({
       x: 20,
       y: 50,
@@ -35,9 +48,10 @@ export class LevelOne extends Scene {
     scoreLabel.on('preupdate', function(this: ex.Label, evt){
       this.text = "Frags: " + stats.score;
     });
-    engine.add(scoreLabel);
+    this.add(scoreLabel);
+  }
 
-    // const gameOverLabel = new ex.Label("Game Over", engine.halfDrawWidth - 250, engine.halfDrawHeight);
+  private setGameOverLabel(engine: Engine) {
     this.gameOverLabel = new ex.Label({
       text: "Game Over! Drück F5",
       x: engine.halfDrawWidth -500,
@@ -47,7 +61,6 @@ export class LevelOne extends Scene {
     this.gameOverLabel.scale = new ex.Vector(8,8);
     this.gameOverLabel.actions.blink(1000, 1000, 400);
   }
-  onPostUpdate(_engine: Engine, _delta: number) {}
 
   onPreUpdate(_engine: Engine, _delta: number) {
     if (stats.gameOver) {
